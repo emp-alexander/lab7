@@ -73,14 +73,12 @@ public:
 
 	void Display()
 	{
-
-		printf("\nМарка: %s\n", this->autoBrend);
-		printf("Название: %s\n", this->autoName);
-		printf("Стоимость: %d\n", this->autoCost);
-		printf("Максимальная скорость: %d\n", this->autoMax_speed);
-		printf("Год выпуска: %d\n", this->autoYear);
+		std::cout << "Марка: " << this->autoBrend << std::endl;
+		std::cout << "Название: " << this->autoName << std::endl;
+		std::cout << "Стоимость: " << this->autoCost << std::endl;
+		std::cout << "Максимальная скорость: " << this->autoMax_speed << std::endl;
+		std::cout << "Год выпуска: " << this->autoYear << std::endl;
 		std::cout << autoeng1.GetInfo() << std::endl << std::endl;
-		//printf("\n");
 
 	}
 
@@ -88,13 +86,10 @@ public:
 	{
 
 		puts("Введите марку автомобиля:");
-		scanf("%s", this->autoBrend);
-		fflush(stdin);
+		std::cin >> this->autoBrend;
 
 		puts("Введите название автомобиля:");
-		scanf("%s", this->autoName);
-		fflush(stdin);
-
+		std::cin >> this->autoName;
 
 		puts("Введите стоимость автомобиля:");
 		scanf("%d", &this->autoCost);
@@ -115,6 +110,22 @@ public:
 	int Add(Auto_show second)
 	{
 		return this->autoCost + second.autoCost;
+	}
+
+	int operator+ (Auto_show& dif)
+	{
+		return autoCost + dif.autoCost;
+	}
+
+
+	int operator++()
+	{
+		return ++autoCost;
+	}
+
+	int operator++(int)
+	{
+		return ++autoYear;
 	}
 
 
@@ -155,9 +166,11 @@ int main()
 	second_auto.Display();
 
 	contest(&first_auto);
+	first_auto.Display();
 
-	printf("Стоимость двух автомобилей: %d\n", second_auto.Add(first_auto));
-
+	std::cout << "Cost sum: " << first_auto + second_auto << std::endl;
+	std::cout << "++Cost: " << ++first_auto << std::endl;
+	std::cout << "Year++: " << first_auto++ << std::endl;
 
 	return 0;
 }
