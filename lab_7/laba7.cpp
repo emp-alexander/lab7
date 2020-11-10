@@ -128,6 +128,18 @@ public:
 		return ++autoYear;
 	}
 
+	void CostAddr(int& autoCost)
+	{
+		autoCost = this->autoCost;
+		return;
+	}
+
+	void SpeedPtr(int* autoMax_speed)
+	{
+		*autoMax_speed = this->autoMax_speed;
+		return;
+	}
+
 
 
 private:
@@ -171,6 +183,15 @@ int main()
 	std::cout << "Cost sum: " << first_auto + second_auto << std::endl;
 	std::cout << "++Cost: " << ++first_auto << std::endl;
 	std::cout << "Year++: " << first_auto++ << std::endl;
+
+
+	int cost;
+	first_auto.CostAddr(cost);
+	std::cout << "Cost:" << cost << std::endl;
+
+	first_auto.SpeedPtr(&cost);
+	std::cout << "Speed:" << cost << std::endl;
+
 
 	return 0;
 }
