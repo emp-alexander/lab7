@@ -69,6 +69,42 @@ public:
 
 	}
 
+	//конструктор со всеми параметрами
+	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
+	{
+		this->autoBrend = brend;
+		this->autoName = name;
+		this->autoCost = cost;
+		this->autoMax_speed = max_speed;
+		this->autoYear = year;
+		this->autoeng1 = eng1;
+
+	}
+
+
+	//конструктор с 1 пармаетром
+
+	Auto_show(int year)
+	{
+		autoBrend = "Lada";
+		autoName = "Niva";
+		autoCost = 100;
+		autoMax_speed = 150;
+		this->autoYear = year;
+
+	}
+
+	Auto_show(const Auto_show& a) :
+		autoBrend(a.autoBrend),
+		autoName(a.autoName),
+		autoCost(a.autoCost),
+		autoMax_speed(a.autoMax_speed),
+		autoYear(a.autoYear),
+		autoeng1(a.autoeng1)
+	{
+		std::cout << "Contstructor shallow copy." << std::endl;
+	}
+
 	friend void contest(Auto_show* a);
 
 	void Display()
