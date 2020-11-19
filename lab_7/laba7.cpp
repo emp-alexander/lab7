@@ -139,6 +139,13 @@ public:
 		*autoMax_speed = this->autoMax_speed;
 		return;
 	}
+	static int Racing() {
+		return racing;
+	}
+
+	static void Racingset(int r) {
+		racing = r;
+	}
 
 
 
@@ -152,6 +159,7 @@ private:
 	static int racing;
 };
 
+int Auto_show::racing = 4;
 
 void contest(Auto_show* a) {
 	a->autoCost = 0;
@@ -170,30 +178,9 @@ int main()
 	first_auto.init("lada", "granta", 300, 150, 2017, autoeng);
 	first_auto.Display();
 
+	Auto_show::Racingset(5);
 
-
-	puts("Второй автомобиль");
-	Auto_show second_auto;
-	second_auto.Read();
-
-	second_auto.Display();
-
-	contest(&first_auto);
-	first_auto.Display();
-
-	std::cout << "Cost sum: " << first_auto + second_auto << std::endl;
-	std::cout << "++Cost: " << ++first_auto << std::endl;
-	std::cout << "Year++: " << first_auto++ << std::endl;
-
-
-	int cost;
-	first_auto.CostAddr(cost);
-	std::cout << "Cost:" << cost << std::endl;
-
-	first_auto.SpeedPtr(&cost);
-	std::cout << "Speed:" << cost << std::endl;
-
-	
+	std::cout << "Acceleration to 100: " << Auto_show::Racing() << std::endl;
 
 
 	return 0;
