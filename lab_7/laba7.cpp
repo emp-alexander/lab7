@@ -149,6 +149,7 @@ private:
 	int autoMax_speed;
 	int autoYear;
 	Engine autoeng1;
+	static int racing;
 };
 
 
@@ -191,6 +192,8 @@ int main()
 
 	first_auto.SpeedPtr(&cost);
 	std::cout << "Speed:" << cost << std::endl;
+
+	
 
 
 	return 0;
