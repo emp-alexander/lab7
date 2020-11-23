@@ -49,16 +49,7 @@ class Auto_show
 {
 public:
 
-	Auto_show()
-	{
-
-	}
-	~Auto_show()
-	{
-
-	}
-
-	void init(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
+	/*void init(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
 	{
 		this->autoBrend = brend;
 		this->autoName = name;
@@ -67,7 +58,7 @@ public:
 		this->autoYear = year;
 		this->autoeng1 = eng1;
 
-	}
+	}*/
 
 	//конструктор со всеми параметрами
 	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
@@ -78,7 +69,7 @@ public:
 		this->autoMax_speed = max_speed;
 		this->autoYear = year;
 		this->autoeng1 = eng1;
-
+		std::cout << "Constructor with all parameters." << std::endl;
 	}
 
 
@@ -91,7 +82,7 @@ public:
 		autoCost = 100;
 		autoMax_speed = 150;
 		this->autoYear = year;
-
+		std::cout << "Constructor with one parameter." << std::endl;
 	}
 
 	Auto_show(const Auto_show& a) :
@@ -105,6 +96,38 @@ public:
 		std::cout << "Contstructor shallow copy." << std::endl;
 	}
 
+	//конструктор без параметров
+	Auto_show()
+	{
+		autoBrend = "Lada";
+		autoName = "Niva";
+		autoCost = 100;
+		autoMax_speed = 150;
+		autoYear = 2015;
+		std::cout << "Constructor without parameters." << std::endl;
+	}
+
+
+	~Auto_show()
+	{
+
+	}
+
+	//перегр =
+	Auto_show& operator= (const Auto_show &oth)
+	{
+		autoBrend = oth.autoBrend;
+		autoName = oth.autoName;
+		autoCost = oth.autoCost;
+		autoMax_speed = oth.autoMax_speed;
+		autoYear = oth.autoYear;
+		autoeng1 = oth.autoeng1;
+		return *this;
+	}
+
+
+
+	
 	friend void contest(Auto_show* a);
 
 	void Display()
@@ -209,14 +232,55 @@ int main()
 
 	puts("Первый автомобиль");
 
-	Auto_show first_auto;
+	//Auto_show first_auto;
+	//Engine autoeng(4, 2, 100);
+	//first_auto.init("lada", "granta", 300, 150, 2017, autoeng);
+	//first_auto.Display();
+
+	///////
 	Engine autoeng(4, 2, 100);
-	first_auto.init("lada", "granta", 300, 150, 2017, autoeng);
-	first_auto.Display();
+	Auto_show first_auto;
+	Auto_show two_auto(2013);
+	Auto_show auto3("BMW", "M5", 500, 290, 2019, autoeng);
 
-	Auto_show::Racingset(5);
+	//Динамич.
 
-	std::cout << "Acceleration to 100: " << Auto_show::Racing() << std::endl;
+	Auto_show* car1 = new Auto_show;
+	(void)car1;
+	Auto_show* car2 = new Auto_show(2020);
+	(void)car2;
+	Engine autoeng3(6, 2, 100);
+	Auto_show* car3 = new Auto_show("BMW", "M3", 300, 230, 2018, autoeng3);
+	(void)car3;
+
+	delete car1;
+	delete car2;
+	delete car3;
+
+	//массив
+	std::cout << "Create array::" << std::endl;
+	Auto_show a[2] = { Auto_show("BMW", "M8", 800, 290, 2018, autoeng3), Auto_show("BMW", "M8", 800, 290, 2019, autoeng3)};
+	a[0].Display();
+	a[1].Display();
+
+	//копир
+	std::cout << "Copy constructor::";
+	Auto_show a1("BMW", "M4", 400, 250, 2008, autoeng);;
+	Auto_show a1Copy(a1);
+	a1Copy.Display();
+
+	//перегрузка
+
+	std::cout << "Overloading operator=::";
+	Auto_show a3;
+	Auto_show a4 = a3;
+	a3.Display();
+	a4.Display();
+
+
+	//Auto_show::Racingset(5);
+
+	//std::cout << "Acceleration to 100: " << Auto_show::Racing() << std::endl;
 
 
 	return 0;
