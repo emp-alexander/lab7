@@ -12,17 +12,42 @@ class Engine {
 public:
 	Engine()
 	{
+		cylinders = 6;
+		capacity = 5;
+		this->power = new int(50);
+		
+	}
+
+	Engine(const Engine& oth)
+	{
+		std::cout << "Constructor deep copy" << std::endl;
+		cylinders = oth.cylinders;
+		capacity = oth.capacity;
+		power = new int(*oth.power);
 
 	}
+
+	
+
+	
+
 	Engine(int cylinders, int capacity, int power)
 	{
 		this->cylinders = cylinders;
 		this->capacity = capacity;
-		this->power = power;
+		this->power = new int(power);
 	}
+	~Engine()
+	{
+
+	}
+
+	
+	
+
 	std::string GetInfo()
 	{
-		return "Двигатель: кол-во целинтров = " + std::to_string(cylinders) + " объем = " + std::to_string(capacity) + " мощность = " + std::to_string(power);
+		return "Двигатель: кол-во целинтров = " + std::to_string(cylinders) + " объем = " + std::to_string(capacity) + " мощность = " + std::to_string(*power);
 	}
 	void Read()
 	{
@@ -39,26 +64,28 @@ public:
 		fflush(stdin);
 	}
 
+	Engine& operator=(const Engine& oth)
+	{
+		
+		cylinders = oth.cylinders;
+		capacity = oth.capacity;
+		power = new int(*oth.power);
+
+		return *this;
+	}
+
 private:
 	int cylinders;
 	int capacity;
-	int power;
+	int* power;
+	
 };
 
 class Auto_show
 {
 public:
 
-	/*void init(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
-	{
-		this->autoBrend = brend;
-		this->autoName = name;
-		this->autoCost = cost;
-		this->autoMax_speed = max_speed;
-		this->autoYear = year;
-		this->autoeng1 = eng1;
 
-	}*/
 
 	//конструктор со всеми параметрами
 	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
@@ -276,6 +303,12 @@ int main()
 	Auto_show a4 = a3;
 	a3.Display();
 	a4.Display();
+
+	std::cout << "Deep copying::";
+	Engine c1;
+	Engine c2(c1);
+	std::cout << c1.GetInfo() << std::endl;
+	std::cout << c2.GetInfo() << std::endl;
 
 
 	//Auto_show::Racingset(5);
