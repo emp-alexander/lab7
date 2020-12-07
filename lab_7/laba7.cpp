@@ -4,6 +4,7 @@
 #include <malloc.h>
 #include <iostream>
 #include <string>
+#include <fstream>
 #pragma warning (disable:4996)
 #define SIZE 25
 
@@ -52,16 +53,14 @@ public:
 	void Read()
 	{
 		puts("Введите кол-во целиндров в двигателе:");
-		scanf("%d", &this->cylinders);
-		fflush(stdin);
+		std::cin >> this->cylinders;
 
 		puts("Введите объем двигателя:");
-		scanf("%d", &this->capacity);
-		fflush(stdin);
+		std::cin >> this->capacity;
 
 		puts("Введите мощность двигателя:");
-		scanf("%d", &this->power);
-		fflush(stdin);
+		std::cin >> *this->power;
+
 	}
 
 	Engine& operator=(const Engine& oth)
@@ -178,16 +177,27 @@ public:
 		std::cin >> this->autoName;
 
 		puts("Введите стоимость автомобиля:");
-		scanf("%d", &this->autoCost);
-		fflush(stdin);
+		std::cin >> this->autoCost;
+		//scanf("%d", &this->autoCost);
+		//fflush(stdin);
 
 		puts("Введите максимальную скорость автомобиля:");
-		scanf("%d", &this->autoMax_speed);
-		fflush(stdin);
+		
+		try
+		{
+			std::cin >> this->autoMax_speed;
+			if (autoMax_speed < 0)
+				throw "Speed cannot be negative";
+		}
+		catch (const char* exception)
+		{
+			std::cerr << "Error:" << exception << '\n';
+		}
+
+
 
 		puts("Введите год выпуска автомобиля:");
-		scanf("%d", &this->autoYear);
-		fflush(stdin);
+		std::cin >> this->autoYear;
 
 		autoeng1.Read();
 
@@ -255,14 +265,11 @@ void contest(Auto_show* a) {
 int main()
 {
 	setlocale(LC_ALL, "ru");
-
+	std::string path = "CarFile.txt";
 
 	puts("Первый автомобиль");
 
-	//Auto_show first_auto;
-	//Engine autoeng(4, 2, 100);
-	//first_auto.init("lada", "granta", 300, 150, 2017, autoeng);
-	//first_auto.Display();
+	
 
 	///////
 	Engine autoeng(4, 2, 100);
@@ -270,50 +277,39 @@ int main()
 	Auto_show two_auto(2013);
 	Auto_show auto3("BMW", "M5", 500, 290, 2019, autoeng);
 
-	//Динамич.
+	Auto_show tmp_auto;
+	tmp_auto.Read();
+	tmp_auto.Display();
 
-	Auto_show* car1 = new Auto_show;
-	(void)car1;
-	Auto_show* car2 = new Auto_show(2020);
-	(void)car2;
-	Engine autoeng3(6, 2, 100);
-	Auto_show* car3 = new Auto_show("BMW", "M3", 300, 230, 2018, autoeng3);
-	(void)car3;
+	//////Динамич.
+	//
+	//Auto_show* car3;
+	//try {
+	//	Engine autoeng3(6, 2, 100);
+	//	car3 = new Auto_show("BMW", "M3", 300, 230, 2018, autoeng3);
+	//	car3->Display();
+	//}
+	//catch (std::bad_alloc) {
+	//	std::cerr << "Exception::No memmory!" << std::endl;
+	//}
+	//
+	//delete car3;
 
-	delete car1;
-	delete car2;
-	delete car3;
+	std::ifstream fin;
+	fin.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-	//массив
-	std::cout << "Create array::" << std::endl;
-	Auto_show a[2] = { Auto_show("BMW", "M8", 800, 290, 2018, autoeng3), Auto_show("BMW", "M8", 800, 290, 2019, autoeng3)};
-	a[0].Display();
-	a[1].Display();
+	try
+	{
+		std::cout << "Попытка открыть файл!" << std::endl;
+		fin.open(path);
+		std::cout << "Файл открыт!" << std::endl;
+	}
+	catch (const std::exception & ex)
+	{
+		std::cout << ex.what() << std::endl;
+		std::cout << "Error open file" << std::endl;
+	}
 
-	//копир
-	std::cout << "Copy constructor::";
-	Auto_show a1("BMW", "M4", 400, 250, 2008, autoeng);;
-	Auto_show a1Copy(a1);
-	a1Copy.Display();
-
-	//перегрузка
-
-	std::cout << "Overloading operator=::";
-	Auto_show a3;
-	Auto_show a4 = a3;
-	a3.Display();
-	a4.Display();
-
-	std::cout << "Deep copying::";
-	Engine c1;
-	Engine c2(c1);
-	std::cout << c1.GetInfo() << std::endl;
-	std::cout << c2.GetInfo() << std::endl;
-
-
-	//Auto_show::Racingset(5);
-
-	//std::cout << "Acceleration to 100: " << Auto_show::Racing() << std::endl;
 
 
 	return 0;
