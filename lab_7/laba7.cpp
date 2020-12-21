@@ -15,19 +15,11 @@ public:
 	{
 		cylinders = 6;
 		capacity = 5;
-		this->power = new int(50);
+		power = 50;
 		
 	}
 
-	Engine(const Engine& oth)
-	{
-		std::cout << "Constructor deep copy" << std::endl;
-		cylinders = oth.cylinders;
-		capacity = oth.capacity;
-		power = new int(*oth.power);
-
-	}
-
+	
 	
 
 	
@@ -36,7 +28,7 @@ public:
 	{
 		this->cylinders = cylinders;
 		this->capacity = capacity;
-		this->power = new int(power);
+		this->power = power;
 	}
 	~Engine()
 	{
@@ -48,7 +40,7 @@ public:
 
 	std::string GetInfo()
 	{
-		return "Двигатель: кол-во целинтров = " + std::to_string(cylinders) + " объем = " + std::to_string(capacity) + " мощность = " + std::to_string(*power);
+		return "Двигатель: кол-во целинтров = " + std::to_string(cylinders) + " объем = " + std::to_string(capacity) + " мощность = " + std::to_string(power);
 	}
 	void Read()
 	{
@@ -59,24 +51,16 @@ public:
 		std::cin >> this->capacity;
 
 		puts("Введите мощность двигателя:");
-		std::cin >> *this->power;
+		std::cin >> this->power;
 
 	}
 
-	Engine& operator=(const Engine& oth)
-	{
-		
-		cylinders = oth.cylinders;
-		capacity = oth.capacity;
-		power = new int(*oth.power);
 
-		return *this;
-	}
 
 private:
 	int cylinders;
 	int capacity;
-	int* power;
+	int power;
 	
 };
 
@@ -243,7 +227,14 @@ public:
 		racing = r;
 	}
 
+	void setEng(const Engine& eEngine)
+	{
+		this->autoeng1 = eEngine;
+	}
+	//friend std::istream& operator>>(std::istream& in, Auto_show& w);
 
+	friend std::ostream& operator<< (std::ostream& out, const Auto_show& a);
+	friend std::istream& operator>> (std::istream& in, Auto_show& a);
 
 private:
 	std::string autoBrend;
@@ -255,6 +246,35 @@ private:
 	static int racing;
 };
 
+
+std::ostream& operator<< (std::ostream& out, const Auto_show& a)
+{
+	
+	out << "Марка: " << a.autoBrend << std::endl;
+	out << "Название: " << a.autoName << std::endl;
+	out << "Стоимость: " << a.autoCost << std::endl;
+	out << "Скорость: " << a.autoMax_speed << std::endl;
+	out << "Год: " << a.autoYear << std::endl;
+
+	return out;
+}
+
+std::istream& operator>> (std::istream& in, Auto_show& a)
+{
+	std::cout << "Введите марку:" << std::endl;
+	in >> a.autoBrend;
+	std::cout << "Введите название:" << std::endl;
+	in >> a.autoName;
+	std::cout << "Введите стоимоть:" << std::endl;
+	in >> a.autoCost;
+	std::cout << "Введите скорость:" << std::endl;
+	in >> a.autoMax_speed;
+	std::cout << "Введите год:" << std::endl;
+	in >> a.autoYear;
+
+	return in;
+}
+
 int Auto_show::racing = 4;
 
 void contest(Auto_show* a) {
@@ -265,50 +285,47 @@ void contest(Auto_show* a) {
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	std::string path = "CarFile.txt";
-
-	puts("Первый автомобиль");
-
 	
 
-	///////
-	Engine autoeng(4, 2, 100);
-	Auto_show first_auto;
-	Auto_show two_auto(2013);
-	Auto_show auto3("BMW", "M5", 500, 290, 2019, autoeng);
+	puts("Первый автомобиль");
+	//одномерный
+	int lenght = 0;
+	std::cout << "Input array length:" << std::endl;
+	std::cin >> lenght;
+	Auto_show* car_array = new Auto_show[lenght];
 
-	Auto_show tmp_auto;
-	tmp_auto.Read();
-	tmp_auto.Display();
-
-	//////Динамич.
-	//
-	//Auto_show* car3;
-	//try {
-	//	Engine autoeng3(6, 2, 100);
-	//	car3 = new Auto_show("BMW", "M3", 300, 230, 2018, autoeng3);
-	//	car3->Display();
-	//}
-	//catch (std::bad_alloc) {
-	//	std::cerr << "Exception::No memmory!" << std::endl;
-	//}
-	//
-	//delete car3;
-
-	std::ifstream fin;
-	fin.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-
-	try
+	for (int i = 0; i < lenght; i++)
 	{
-		std::cout << "Попытка открыть файл!" << std::endl;
-		fin.open(path);
-		std::cout << "Файл открыт!" << std::endl;
+		car_array[i].setEng(Engine(4, 2, 100));
+		car_array[i].Display();
 	}
-	catch (const std::exception & ex)
+	delete[] car_array;
+
+	//двумерный
+
+	std::cout << "Single-dimensional array M x N. Input  M, N: " << std::endl;
+	int m, n;
+	std::cin >> m >> n;
+	Auto_show** car_d_array = new Auto_show * [m];
+	for (int i = 0; i < m; i++)
 	{
-		std::cout << ex.what() << std::endl;
-		std::cout << "Error open file" << std::endl;
+		car_d_array[i] = new Auto_show[n];
+		for (int j = 0; j < n; j++)
+		{
+			std::cin >> car_d_array[i][j];
+		}
 	}
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+			std::cout << "Object::Auto_show[" << i << "][" << j << "]" << std::endl << car_d_array[i][j] << std::endl;
+	}
+
+
+	for (int i = 0; i < m; i++)
+		delete[] car_d_array[i];
+	delete[] car_d_array;
 
 
 
