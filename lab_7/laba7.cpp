@@ -4,13 +4,13 @@
 #include <malloc.h>
 #include <iostream>
 #include <string>
-#include <fstream>
 #pragma warning (disable:4996)
 #define SIZE 25
 
 
 class Engine {
 public:
+
 	Engine()
 	{
 		cylinders = 6;
@@ -30,12 +30,15 @@ public:
 		this->capacity = capacity;
 		this->power = power;
 	}
-	~Engine()
+	/*~Engine()
 	{
 
-	}
+	}*/
 
-	
+	virtual void sound()
+	{
+		std::cout << "Сильно громкий двигатель" << std::endl;
+	}
 	
 
 	std::string GetInfo()
@@ -57,11 +60,45 @@ public:
 
 
 
-private:
+protected:
 	int cylinders;
 	int capacity;
 	int power;
 	
+};
+
+class Electrik_motor : public Engine
+{
+
+public:
+
+	Electrik_motor(int nalichie) : Engine()
+	{
+		this->nalichie = nalichie;
+	}
+
+
+	Electrik_motor() : Engine()
+	{
+		nalichie = 1;
+		//power_reserve = 450;
+		//battery = 500;
+	}
+
+	void sound() override
+	{
+		std::cout << "двигатель бесшумен" << std::endl;
+	}
+
+	std::string GetInfoE()
+	{
+		return "Электродвигатель: " + std::to_string(nalichie);
+	}
+
+private:
+	int nalichie; //1-есть электодвигатель //2- нет электородвигателя
+	//int power_reserve;
+	//int battery;
 };
 
 class Auto_show
@@ -71,7 +108,7 @@ public:
 
 
 	//конструктор со всеми параметрами
-	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Engine eng1)
+	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Electrik_motor eng1)
 	{
 		this->autoBrend = brend;
 		this->autoName = name;
@@ -79,6 +116,7 @@ public:
 		this->autoMax_speed = max_speed;
 		this->autoYear = year;
 		this->autoeng1 = eng1;
+	
 		std::cout << "Constructor with all parameters." << std::endl;
 	}
 
@@ -147,7 +185,7 @@ public:
 		std::cout << "Стоимость: " << this->autoCost << std::endl;
 		std::cout << "Максимальная скорость: " << this->autoMax_speed << std::endl;
 		std::cout << "Год выпуска: " << this->autoYear << std::endl;
-		std::cout << autoeng1.GetInfo() << std::endl << std::endl;
+		std::cout << autoeng1.GetInfoE() << std::endl << std::endl;
 
 	}
 
@@ -227,10 +265,10 @@ public:
 		racing = r;
 	}
 
-	void setEng(const Engine& eEngine)
-	{
-		this->autoeng1 = eEngine;
-	}
+	//void setEng(const Engine& eEngine)
+	//{
+	//	this->autoeng1 = eEngine;
+	//}
 	//friend std::istream& operator>>(std::istream& in, Auto_show& w);
 
 	friend std::ostream& operator<< (std::ostream& out, const Auto_show& a);
@@ -242,9 +280,11 @@ private:
 	int autoCost;
 	int autoMax_speed;
 	int autoYear;
-	Engine autoeng1;
+	Electrik_motor autoeng1;
 	static int racing;
 };
+
+
 
 
 std::ostream& operator<< (std::ostream& out, const Auto_show& a)
@@ -285,49 +325,67 @@ void contest(Auto_show* a) {
 int main()
 {
 	setlocale(LC_ALL, "ru");
+
 	
 
-	puts("Первый автомобиль");
-	//одномерный
-	int lenght = 0;
-	std::cout << "Input array length:" << std::endl;
-	std::cin >> lenght;
-	Auto_show* car_array = new Auto_show[lenght];
+	
+	Electrik_motor first(0);
+	Auto_show first_auto("Car", "htyj", 200, 25, 2014, 0);
+	first.sound();
+	
+	std::cout << first.GetInfoE() << std::endl << std::endl;
 
-	for (int i = 0; i < lenght; i++)
-	{
-		car_array[i].setEng(Engine(4, 2, 100));
-		car_array[i].Display();
-	}
-	delete[] car_array;
+	//first_auto.Display();
+	
 
-	//двумерный
+	//puts("Первый автомобиль");
+	////одномерный
+	//int lenght = 0;
+	//std::cout << "Input array length:" << std::endl;
+	//std::cin >> lenght;
+	//Auto_show* car_array = new Auto_show[lenght];
 
-	std::cout << "Single-dimensional array M x N. Input  M, N: " << std::endl;
-	int m, n;
-	std::cin >> m >> n;
-	Auto_show** car_d_array = new Auto_show * [m];
-	for (int i = 0; i < m; i++)
-	{
-		car_d_array[i] = new Auto_show[n];
-		for (int j = 0; j < n; j++)
-		{
-			std::cin >> car_d_array[i][j];
-		}
-	}
+	//for (int i = 0; i < lenght; i++)
+	//{
+	//	car_array[i].setEng(Engine(4, 2, 100));
+	//	car_array[i].Display();
+	//}
+	//delete[] car_array;
 
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
-			std::cout << "Object::Auto_show[" << i << "][" << j << "]" << std::endl << car_d_array[i][j] << std::endl;
-	}
+	////двумерный
+
+	//std::cout << "Single-dimensional array M x N. Input  M, N: " << std::endl;
+	//int m, n;
+	//std::cin >> m >> n;
+	//Auto_show** car_d_array = new Auto_show * [m];
+	//for (int i = 0; i < m; i++)
+	//{
+	//	car_d_array[i] = new Auto_show[n];
+	//	for (int j = 0; j < n; j++)
+	//	{
+	//		std::cin >> car_d_array[i][j];
+	//	}
+	//}
+
+	//for (int i = 0; i < m; i++)
+	//{
+	//	for (int j = 0; j < n; j++)
+	//		std::cout << "Object::Auto_show[" << i << "][" << j << "]" << std::endl << car_d_array[i][j] << std::endl;
+	//}
 
 
-	for (int i = 0; i < m; i++)
-		delete[] car_d_array[i];
-	delete[] car_d_array;
+	//for (int i = 0; i < m; i++)
+	//	delete[] car_d_array[i];
+	//delete[] car_d_array;
 
 
+	Engine* e = new Engine();
+	e->sound();
+	delete e;
+
+	e = new Electrik_motor();
+	e->sound();
+	delete e;
 
 	return 0;
 }
