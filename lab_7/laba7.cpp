@@ -35,9 +35,15 @@ public:
 
 	}*/
 
+	//вертуал функц
 	virtual void sound()
 	{
 		std::cout << "—ильно громкий двигатель" << std::endl;
+	}
+
+	void virt()
+	{
+		sound();
 	}
 	
 
@@ -58,8 +64,24 @@ public:
 
 	}
 
+	int getcylinders()
+	{
 
+		return cylinders;
+	}
 
+	int getcapacity()
+	{
+
+		return capacity;
+	}
+	int getpower()
+	{
+
+		return power;
+	}
+
+	
 protected:
 	int cylinders;
 	int capacity;
@@ -67,18 +89,18 @@ protected:
 	
 };
 
-class Electrik_motor : public Engine
+class Ele_motor : public Engine
 {
 
 public:
 
-	Electrik_motor(int nalichie) : Engine()
+	Ele_motor(int nalichie) : Engine()
 	{
 		this->nalichie = nalichie;
 	}
 
 
-	Electrik_motor() : Engine()
+	Ele_motor() : Engine()
 	{
 		nalichie = 1;
 		//power_reserve = 450;
@@ -90,9 +112,27 @@ public:
 		std::cout << "двигатель бесшумен" << std::endl;
 	}
 
+	//прегрузка присваив
+	void operator =(Engine e)
+	{
+		cylinders = e.getcylinders();
+		capacity = e.getcapacity();
+		power = e.getpower();
+		this->nalichie = 0;
+	}
+
+
+
 	std::string GetInfoE()
 	{
 		return "Ёлектродвигатель: " + std::to_string(nalichie);
+	}
+
+	void out_eng()
+	{
+		std::cout << "÷илиндры: " << cylinders << " ќбъем: " << capacity << " ћощность: " << power << " Ёлектро: " << nalichie << std::endl;
+
+
 	}
 
 private:
@@ -108,7 +148,7 @@ public:
 
 
 	//конструктор со всеми параметрами
-	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Electrik_motor eng1)
+	Auto_show(std::string brend, std::string name, int cost, int max_speed, int year, Ele_motor eng1)
 	{
 		this->autoBrend = brend;
 		this->autoName = name;
@@ -280,9 +320,120 @@ private:
 	int autoCost;
 	int autoMax_speed;
 	int autoYear;
-	Electrik_motor autoeng1;
+	Ele_motor autoeng1;
 	static int racing;
 };
+
+//јбстрактный класс
+
+class Kind_Engine {
+public:
+
+	virtual void sound_a() = 0;
+	Kind_Engine()
+	{
+		power_a = 500;
+	}
+
+private:
+	int power_a;
+};
+
+class benz_engine : public Kind_Engine
+{
+public:
+
+	benz_engine()
+	{
+		a_cylinders = 6;
+		a_capacity = 5;
+
+	}
+
+
+
+
+
+
+	benz_engine(int a_cylinders, int a_capacity)
+	{
+		this->a_cylinders = a_cylinders;
+		this->a_capacity = a_capacity;
+	}
+
+
+	virtual void sound_a()
+	{
+		std::cout << "—ильно громкий двигатель" << std::endl;
+	}
+
+
+	std::string GetInfo()
+	{
+		return "ƒвигатель: кол-во целинтров = " + std::to_string(a_cylinders) + " объем = " + std::to_string(a_capacity);
+	}
+	void Read()
+	{
+		puts("¬ведите кол-во целиндров в двигателе:");
+		std::cin >> this->a_cylinders;
+
+		puts("¬ведите объем двигател€:");
+		std::cin >> this->a_capacity;
+
+
+
+	}
+
+
+
+protected:
+	int a_cylinders;
+	int a_capacity;
+
+
+};
+
+class Electrik_motor : public Kind_Engine
+{
+
+public:
+
+	Electrik_motor(int battery) : Kind_Engine()
+	{
+		this->battery = battery;
+	}
+
+
+	Electrik_motor() : Kind_Engine()
+	{
+		battery = 500;
+	}
+
+	void sound_a() override
+	{
+		std::cout << "двигатель бесшумен" << std::endl;
+	}
+
+	std::string GetInfoE()
+	{
+		return "Ёлектродвигатель: батаре€  " + std::to_string(battery);
+	}
+
+private:
+	int battery;
+};
+
+class Car
+{
+public:
+
+	void sound_a(Kind_Engine* en)
+	{
+		en->sound_a();
+	}
+};
+
+////
 
 
 
@@ -315,6 +466,7 @@ std::istream& operator>> (std::istream& in, Auto_show& a)
 	return in;
 }
 
+
 int Auto_show::racing = 4;
 
 void contest(Auto_show* a) {
@@ -329,11 +481,37 @@ int main()
 	
 
 	
-	Electrik_motor first(0);
+	Ele_motor first(0);
 	Auto_show first_auto("Car", "htyj", 200, 25, 2014, 0);
+	//замена display
+	std::cout << "Display:" << first_auto << std::endl;
+
+	//перегруз присв
+	Ele_motor one;
+	Engine two;
+	one = two;
+	one.out_eng();
+
+	//виртуал ф
 	first.sound();
-	
+	first.virt();
+	Engine* e = new Engine();
+	e->sound();
+	delete e;
+
+	e = new Ele_motor();
+	e->sound();
+	delete e;
+
 	std::cout << first.GetInfoE() << std::endl << std::endl;
+
+
+
+	Electrik_motor abstr_car;
+	
+
+	Car car;
+	car.sound_a(&abstr_car);
 
 	//first_auto.Display();
 	
@@ -379,13 +557,7 @@ int main()
 	//delete[] car_d_array;
 
 
-	Engine* e = new Engine();
-	e->sound();
-	delete e;
 
-	e = new Electrik_motor();
-	e->sound();
-	delete e;
 
 	return 0;
 }
